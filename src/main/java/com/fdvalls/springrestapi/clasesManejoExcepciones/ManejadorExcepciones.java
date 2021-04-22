@@ -4,10 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.fdvalls.springrestapi.clasesExceptions.BadRequestException;
 import com.fdvalls.springrestapi.clasesExceptions.NotFoundRequest;
-import com.fdvalls.springrestapi.clasesExceptions.ResultOk;
+import com.fdvalls.springrestapi.clasesExceptions.NotModified;
 
 import org.springframework.http.HttpStatus;
-
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,23 +17,23 @@ import org.springframework.web.bind.annotation.RestController;
 public class ManejadorExcepciones {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler({BadRequestException.class})
+    @ExceptionHandler({ BadRequestException.class })
     @ResponseBody
-    public ErrorMessage badRequest(HttpServletRequest request, Exception exception){
-        return new ErrorMessage(exception, request.getRequestURI());
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @ExceptionHandler({ResultOk.class})
-    @ResponseBody
-    public ErrorMessage resultOk(HttpServletRequest request, Exception exception){
+    public ErrorMessage badRequest(HttpServletRequest request, Exception exception) {
         return new ErrorMessage(exception, request.getRequestURI());
     }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({NotFoundRequest.class})
+    @ExceptionHandler({ NotFoundRequest.class })
     @ResponseBody
-    public ErrorMessage notFoundRequest(HttpServletRequest request, Exception exception){
+    public ErrorMessage notFoundRequest(HttpServletRequest request, Exception exception) {
+        return new ErrorMessage(exception, request.getRequestURI());
+    }
+
+    @ResponseStatus(HttpStatus.NOT_MODIFIED)
+    @ExceptionHandler({ NotModified.class })
+    @ResponseBody
+    public ErrorMessage notModified(HttpServletRequest request, Exception exception) {
         return new ErrorMessage(exception, request.getRequestURI());
     }
 

@@ -1,11 +1,14 @@
-use Registro_Patentes; 
+CREATE SCHEMA `Registro_Patentes` ;
 
-SELECT * FROM Registro_Patentes.patente;
+use Registro_Patentes;
 
 CREATE TABLE patente (
     NroPatente varchar(40),
-    id bigint
+    id bigint unique auto_increment,
+    PRIMARY KEY (id)
 );
+
+select * from patente;
 
 INSERT INTO patente (NroPatente)
 VALUES

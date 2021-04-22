@@ -24,9 +24,15 @@ public class Repositorio {
         this.simpleJdbcInsert = simpleJdbcInsert;
     }
 
-    public List<ModeloPatente> getAll() {
-        String query = "select * from patente";
-        List<ModeloPatente> all = this.jdbcTemplate.query(query, new PatenteRowMapper());
+    public ModeloPatente getPatente(String patente) {
+        String query = "select * from patente where NroPatente = ?";
+        ModeloPatente modeloPatente = this.jdbcTemplate.queryForObject(query, new PatenteRowMapper(), patente);
+        return modeloPatente;
+    }
+
+    public List<ModeloPatente> getAll(String patente) {
+        String query = "select * from patente where NroPatente = ?";
+        List<ModeloPatente> all = this.jdbcTemplate.query(query, new PatenteRowMapper(), patente);
         return all;
     }
 

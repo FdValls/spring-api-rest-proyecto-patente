@@ -13,6 +13,10 @@ public class ErrorMessage {
 
     }
 
+    public ErrorMessage(Long id) {
+        this.message = "Id = " + String.valueOf(id);
+    }
+
     public String getException() {
         return exception;
     }
@@ -30,5 +34,7 @@ public class ErrorMessage {
         return "ErrorMessage{" + "exception='" + exception + '\'' + ", message='" + '\'' + ", path='" + path + '\''
                 + '}';
     }
+
+    
 
 }

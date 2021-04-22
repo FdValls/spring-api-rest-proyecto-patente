@@ -16,13 +16,32 @@ public class PatenteService {
         this.patenteRepository = patenteRepository;
     }
 
-    public List<ModeloPatente> getAll() {
-        return patenteRepository.getAll();
+    public List<ModeloPatente> getAll(String patente) {
+        return patenteRepository.getAll(patente);
+    }
+
+    public ModeloPatente getPatente(String patente) {
+        return patenteRepository.getPatente(patente);
     }
 
     public void save(ModeloPatente patente) {
         patenteRepository.addRow(patente);
     }
 
+    public Long buscarPatente(String patente) {
+        boolean seEncontro = false;
+        Long myId = null;
+        List<ModeloPatente> misPatentes = getAll(patente);
+        int i = 0;
+        while (i < misPatentes.size() && !seEncontro) {
+            if (misPatentes.get(i).getNroPatente().toUpperCase().equals(patente.toUpperCase())) {
+                seEncontro = true;
+                myId = misPatentes.get(i).getId();
+            } else {
+                i++;
+            }
+        }
+        return myId;
+    }
 
 }
