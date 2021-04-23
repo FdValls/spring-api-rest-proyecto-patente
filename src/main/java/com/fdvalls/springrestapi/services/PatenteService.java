@@ -16,8 +16,8 @@ public class PatenteService {
         this.patenteRepository = patenteRepository;
     }
 
-    public List<ModeloPatente> getAll(String patente) {
-        return patenteRepository.getAll(patente);
+    public List<ModeloPatente> getAllPatente() {
+        return patenteRepository.getAllPatente();
     }
 
     public ModeloPatente getPatente(String patente) {
@@ -31,7 +31,7 @@ public class PatenteService {
     public Long buscarPatente(String patente) {
         boolean seEncontro = false;
         Long myId = null;
-        List<ModeloPatente> misPatentes = getAll(patente);
+        List<ModeloPatente> misPatentes = getAllPatente();
         int i = 0;
         while (i < misPatentes.size() && !seEncontro) {
             if (misPatentes.get(i).getNroPatente().toUpperCase().equals(patente.toUpperCase())) {

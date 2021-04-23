@@ -1,13 +1,10 @@
 package com.fdvalls.springrestapi.clasesExceptions;
 
-import com.fdvalls.springrestapi.services.PatenteService;
 
 public class ValidarPatente {
 
-    private final PatenteService patenteService;
 
-    public ValidarPatente(PatenteService patenteService) {
-        this.patenteService = patenteService;
+    public ValidarPatente() {
     }
 
     public boolean validarPatenteVieja(String cadena) {

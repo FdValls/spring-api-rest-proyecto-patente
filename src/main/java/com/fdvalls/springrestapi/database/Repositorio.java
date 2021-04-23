@@ -30,9 +30,9 @@ public class Repositorio {
         return modeloPatente;
     }
 
-    public List<ModeloPatente> getAll(String patente) {
-        String query = "select * from patente where NroPatente = ?";
-        List<ModeloPatente> all = this.jdbcTemplate.query(query, new PatenteRowMapper(), patente);
+    public List<ModeloPatente> getAllPatente() {
+        String query = "select * from patente";
+        List<ModeloPatente> all = this.jdbcTemplate.query(query, new PatenteRowMapper());
         return all;
     }
 

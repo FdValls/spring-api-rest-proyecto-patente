@@ -14,6 +14,9 @@ public class ModeloPatente {
         this.nroPatente = nroPatente;
     }
 
+    public ModeloPatente() {
+    }
+
     public String getNroPatente() {
         return nroPatente;
     }

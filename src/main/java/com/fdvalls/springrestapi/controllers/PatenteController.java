@@ -26,11 +26,10 @@ public class PatenteController {
         this.patenteService = patenteService;
     }
 
-    // Method GET TERMINADO!
     @GetMapping("/nroDePatente")
     public Response printPatente(@RequestParam("patente") String patente) throws Exception {
         Response respuesta = new Response("");
-        ValidarPatente recursosPatente = new ValidarPatente(patenteService);
+        ValidarPatente recursosPatente = new ValidarPatente();
         patenteService.buscarPatente(patente);
         if (recursosPatente.validarPatenteVieja(patente) || recursosPatente.validarPatenteNueva(patente)) {
             if (patenteService.buscarPatente(patente) != null) {
@@ -48,7 +47,7 @@ public class PatenteController {
     @PostMapping
     public Response savePatente(@RequestBody Request patenteRequest) throws Exception {
         Response respuesta = new Response("");
-        ValidarPatente recursosPatente = new ValidarPatente(patenteService);
+        ValidarPatente recursosPatente = new ValidarPatente();
         patenteService.buscarPatente(patenteRequest.getNroPatente());
         // Valido la patente
         if (recursosPatente.validarPatenteVieja(patenteRequest.getNroPatente())
