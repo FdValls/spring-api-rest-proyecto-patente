@@ -33,7 +33,6 @@ public class DatabaseConfig {
         dataSource.setUrl(this.url);
         dataSource.setUsername(this.username);
         dataSource.setPassword(this.password);
-
         return dataSource;
     }
 
@@ -44,7 +43,9 @@ public class DatabaseConfig {
 
     @Bean
     public SimpleJdbcInsert simpleJdbcInsert(DataSource dataSource) {
-        return new SimpleJdbcInsert(dataSource).withTableName("patente");
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(dataSource).withTableName("patente");
+        simpleJdbcInsert.setGeneratedKeyName("id");
+        return simpleJdbcInsert;
     }
 
 }

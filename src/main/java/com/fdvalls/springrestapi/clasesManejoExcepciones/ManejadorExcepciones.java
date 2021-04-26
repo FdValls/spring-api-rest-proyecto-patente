@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import com.fdvalls.springrestapi.clasesExceptions.BadRequestException;
 import com.fdvalls.springrestapi.clasesExceptions.NotFoundRequest;
-import com.fdvalls.springrestapi.clasesExceptions.NotModified;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -27,13 +26,6 @@ public class ManejadorExcepciones {
     @ExceptionHandler({ NotFoundRequest.class })
     @ResponseBody
     public ErrorMessage notFoundRequest(HttpServletRequest request, Exception exception) {
-        return new ErrorMessage(exception, request.getRequestURI());
-    }
-
-    @ResponseStatus(HttpStatus.NOT_MODIFIED)
-    @ExceptionHandler({ NotModified.class })
-    @ResponseBody
-    public ErrorMessage notModified(HttpServletRequest request, Exception exception) {
         return new ErrorMessage(exception, request.getRequestURI());
     }
 

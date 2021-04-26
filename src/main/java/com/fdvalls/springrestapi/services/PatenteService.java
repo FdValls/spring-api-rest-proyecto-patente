@@ -24,24 +24,8 @@ public class PatenteService {
         return patenteRepository.getPatente(patente);
     }
 
-    public void save(ModeloPatente patente) {
-        patenteRepository.addRow(patente);
-    }
-
-    public Long buscarPatente(String patente) {
-        boolean seEncontro = false;
-        Long myId = null;
-        List<ModeloPatente> misPatentes = getAllPatente();
-        int i = 0;
-        while (i < misPatentes.size() && !seEncontro) {
-            if (misPatentes.get(i).getNroPatente().toUpperCase().equals(patente.toUpperCase())) {
-                seEncontro = true;
-                myId = misPatentes.get(i).getId();
-            } else {
-                i++;
-            }
-        }
-        return myId;
+    public Number save(ModeloPatente patente) {
+        return patenteRepository.addRow(patente);
     }
 
 }
