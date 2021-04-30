@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.fdvalls.springrestapi.model.ModeloPatente;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -24,16 +25,26 @@ public class Repositorio {
         this.simpleJdbcInsert = simpleJdbcInsert;
     }
 
-    public List<ModeloPatente> getAll() {
+    public ModeloPatente getPatente(String patente) {
+        String query = "select * from patente where NroPatente = ?";
+        try {
+            ModeloPatente modeloPatente = this.jdbcTemplate.queryForObject(query, new PatenteRowMapper(), patente);
+            return modeloPatente;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public List<ModeloPatente> getAllPatente() {
         String query = "select * from patente";
         List<ModeloPatente> all = this.jdbcTemplate.query(query, new PatenteRowMapper());
         return all;
     }
 
-    public int addRow(ModeloPatente emp) {
+    public Number addRow(ModeloPatente emp) {
         Map<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("NroPatente", emp.getNroPatente());
-        return simpleJdbcInsert.execute(parameters);
+        return simpleJdbcInsert.executeAndReturnKey(parameters);
     }
 
     private static class PatenteRowMapper implements RowMapper<ModeloPatente> {

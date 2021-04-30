@@ -1,20 +1,21 @@
 package com.fdvalls.springrestapi.controllers;
 
-import java.util.List;
-
 import com.fdvalls.springrestapi.clasesExceptions.BadRequestException;
 import com.fdvalls.springrestapi.clasesExceptions.NotFoundRequest;
-import com.fdvalls.springrestapi.clasesExceptions.ResultOk;
-import com.fdvalls.springrestapi.clasesExceptions.RecursosPatentes;
+import com.fdvalls.springrestapi.clasesExceptions.ValidarPatente;
 import com.fdvalls.springrestapi.controllers.dto.Request;
-import com.fdvalls.springrestapi.controllers.dto.Response;
+import com.fdvalls.springrestapi.controllers.dto.ResponseGet;
+import com.fdvalls.springrestapi.controllers.dto.ResponsePost;
 import com.fdvalls.springrestapi.model.ModeloPatente;
 import com.fdvalls.springrestapi.services.PatenteService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -27,33 +28,40 @@ public class PatenteController {
         this.patenteService = patenteService;
     }
 
-    @GetMapping("/all")
-    public Response printAllPatentes() {
-        List<ModeloPatente> allHelloWorlds = patenteService.getAll();
-        String superHello = "";
-        for (ModeloPatente patente : allHelloWorlds) {
-            superHello += patente.getNroPatente() + " " + patente.getId() + " ";
-        }
-        return new Response(superHello);
-    }
-
-    @PostMapping
-    public void savePatente(@RequestBody Request patenteRequest) throws Exception {
-        RecursosPatentes recursosPatente = new RecursosPatentes(patenteService);
-        // Valido la patente
-        if (recursosPatente.validarPatenteVieja(patenteRequest)
-                || recursosPatente.validarPatenteNueva(patenteRequest)) {
-            // Comprobar si existe
-            if (recursosPatente.buscarPatente(patenteRequest) != null) {
-                // Devuelvo COD 200
-                throw new ResultOk("Id en la base de datos: " + recursosPatente.buscarPatente(patenteRequest));
+    @GetMapping
+    public ResponseGet printPatente(@RequestParam("nroPatente") String patente) throws Exception {
+        ValidarPatente recursosPatente = new ValidarPatente();
+        if (recursosPatente.validarPatenteVieja(patente) || recursosPatente.validarPatenteNueva(patente)) {
+            ModeloPatente modeloPatente = patenteService.getPatente(patente);
+            if (modeloPatente != null) {
+                return new ResponseGet(modeloPatente.getId());
             } else {
-                // Devuelvo COD 400 y lo agrego a mi lista de patentes.
-                throw new NotFoundRequest(
-                        "No existe esa patente en nuestra base de datos, por lo tanto se agrega a nuestro registro.");
+                throw new NotFoundRequest("No se encontro la patente.");
             }
         } else {
             throw new BadRequestException("Formato de patente invalida");
         }
+    }
+
+    @PostMapping
+    public ResponseEntity<ResponsePost> savePatente(@RequestBody Request patenteRequest) throws Exception {
+        ResponseEntity<ResponsePost> respuesta = null;
+        ValidarPatente recursosPatente = new ValidarPatente();
+        patenteService.getPatente(patenteRequest.getNroPatente());
+        // Valido la patente
+            if (recursosPatente.validarPatenteVieja(patenteRequest.getNroPatente())
+                || recursosPatente.validarPatenteNueva(patenteRequest.getNroPatente())) {
+            // Comprobar si existe
+            if (patenteService.getPatente(patenteRequest.getNroPatente()) != null) {
+                // Si existe devuelvo error "ya existe" y un MSG
+                respuesta = ResponseEntity.status(HttpStatus.NOT_MODIFIED).build();
+            } else {
+                // Si no existe, lo agrego y devuelvo COD 200 + MSG.
+                respuesta = ResponseEntity.ok().body(new ResponsePost(patenteService.save(new ModeloPatente(patenteRequest.getNroPatente()))));
+            }
+        } else {
+            throw new BadRequestException("Formato de patente invalida");
+        }
+        return respuesta;
     }
 }

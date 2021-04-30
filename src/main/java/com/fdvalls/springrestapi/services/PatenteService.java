@@ -16,13 +16,16 @@ public class PatenteService {
         this.patenteRepository = patenteRepository;
     }
 
-    public List<ModeloPatente> getAll() {
-        return patenteRepository.getAll();
+    public List<ModeloPatente> getAllPatente() {
+        return patenteRepository.getAllPatente();
     }
 
-    public void save(ModeloPatente patente) {
-        patenteRepository.addRow(patente);
+    public ModeloPatente getPatente(String patente) {
+        return patenteRepository.getPatente(patente);
     }
 
+    public Number save(ModeloPatente patente) {
+        return patenteRepository.addRow(patente);
+    }
 
 }
